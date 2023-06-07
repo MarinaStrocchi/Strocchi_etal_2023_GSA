@@ -1,0 +1,5 @@
+build
+example/output
+example/data
+example/figures
+GSA_library.egg-info

@@ -1,0 +1,112 @@
+- circadapt_output.py
+	contains code to compute outputs for the CircAdapt ODE code
+
+	- VV_output: computes ventricular outputs for one simulation
+	- AA_output: computes atrial outputs for one simulation
+	- write_output: write a json output file for one simulation
+	- computOutput: computes the output for a set of CircAdapt simulations
+	- filter_output: finds simulations that failed from a set of CircAdapt
+					 simulations
+
+- emulation_step_by_step.py 
+	Based on Stefano's example from the first GPE code (gpytGPE),
+	this code shows you how to train a set of emulators
+
+- file_utils.py
+	A series of functions to read files in and out. Most importantly,
+	it contains R2score2table and ISEscore2table, which produce
+	.tex and .pdf tables for a 5-fold cross-validation training 
+	of the GPEs.
+
+- four_chamber_utils.py
+	Contains some specific functions that are needed to a complex
+	four-chamber simulation. Tackled problems:
+	- Creating a base sequence that is not a hypercube for a subset of parameters
+		This is needed for instance when we want to constrain the cell models
+		with prior history matching procedures (ToR-ORd-Land and Courtemanche-Land)
+	 	while the rest of the parameters are sampled with an hypercube sampling.
+	- Building a Saltelli sample from a given base sequence and scanning the samples
+	  to see if these are acceptable or not
+
+- global_sensitivity_analysis.py
+	Runs a GSA using previously trained GPEs. It also does this with a previously saved
+	Saltelli sampling, for instance one created with four_chamber_utils.Sobol_gpes.
+	Otherwise, it can use sample_NIMP to sample the space with some settings 
+	provided in input (wave_file, wave_gpepath,...) from sobol_pick_sampling (see below).
+
+	This is used when there is one set of parameters that need to be constrained with 
+	the GPEs, while the rest can be sampled on a hypercube. 
+
+	Example: cell model ToR-ORd-Land, you want to run a GSA on the coupled model but you
+	want the calcium from the ToR-ORd model to be physiological and you have run a 
+	history matching on the ToR-ORd model alone to know where the calcium is physiological.
+
+	You can use global_sobol_sensitivity_analysis_NIMP and set the wave settings to 
+	point to your history matching wave so that a subset of parameters (given by wave_idx_param)
+	can be sampled only in the non-implausible area of the history matching wave you are asking for.
+
+- GPE_utils.py
+	Contains problem-specific sampling. The sampling method is always a latin hypercube design,
+	but the way the parameter files are provided in output is specific to the simulation you need 
+	to run:
+	- X_to_eikonalInit: writes a series of .init files to be given in input to ekbatch and
+						and run eikonal simulations
+	- gpes_circadapt: writes a series of json files to be given in input to the ODEs CircAdapt
+					  solver from Christoph
+	- gpes_ionic: designed for the ToR-ORd and Courtemanche models to be run in CARP (bench.pt)
+				  writes in output a series of #_param.txt files to be read as a string in CARP
+				  to modify the parameters of the cell model
+	- gpes_EM: designed for the ToR-ORd or the Courtemanche model coupled with the Land model.
+			   This writes a two folders in outputs called "Land" and "ToRORd_dynCl" or
+			   "COURTEMANCHE" where each folder contains #_param.txt files for the Land and
+			   the ionic model
+
+- gsa_parameters_ranking.py
+	Contains a series of functions to run the parameters after you have run a GSA
+
+- gsa_plotting.py
+	Global sensitivity analysis plotting functions
+
+- history_matching.py
+	Runs history matching waves with (history_matching) and without (history_matching_noGPE) GPEs.
+	There's also a function to intersect two waves.
+
+- hm_plotting.py
+	History matching plotting functions
+
+- HM_utils.py 
+	Functions to combine different experimental datasets and to get the states from a series of
+	history matching waves
+
+- ionic_output.py
+	Functions to compute the output of a cell simulation: transmembrane potential, calcium transient
+	and active tension transient. It also has functions to check which simulations failed.
+
+- kfold_cross_validation_training.py
+	traines the GPEs for a given dataset, first using a 5-fold cross-validation to check that
+	the GPEs are doing well, and then it trains a GPE over the whole dataset.
+
+- ML_utils.py
+	Some machine learning utils to help excluding samples that crashed. I used this for the 
+	cell models, where many samples were either unusable (e.g. rest tension >1kPa, small peak tension,
+	wrong transient duration,...) or crashed (due to instabilities with non-zero stretch). 
+
+	The code in here trains different binary classifiers to get rid of unusable samples
+
+- morris.py
+	Functions to run a Morris sensitivity analysis on the CircAdapt ODEs model. 
+
+- OAT.py
+	Generates the samples for a one-at-a-time sensitivity analysis on the CircAdapt ODEs model.
+
+- param_distr_uncertainty_quantification.py
+	Based on one of Stefano's early examples, but never used it in the four-chamber studies.
+
+- plotting.py
+	Some functions to plot simulation outputs for CircAdapt, cell model output, and produce
+	a scatter plot with the X and Y data.
+
+- saltelly_pick_sampling.py
+	Contains a modification of the SALib library to generate a Saltelli sampling
+	restricting a sub-set of parameters to a non-implausible area generated with a
+	previously run history matching wave.

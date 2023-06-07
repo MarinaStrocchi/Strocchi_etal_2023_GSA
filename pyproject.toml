@@ -1,0 +1,27 @@
+[project]
+name = "GSA_library"
+version = "0.0.1"
+requires-python = "~=3.8"
+
+dependencies = ["numpy~=1.22.1",
+				"scipy~=1.7.3",
+				"seaborn~=0.11.2",
+				"SALib~=1.3.12",
+				"torch~=1.7.1",
+				"reportlab~=3.6.12",
+				"pandas~=1.4.0",
+				'gpytGPE @ git+ssh://git@github.com/MarinaStrocchi/gpytGPE.git@master',
+				'Historia @ git+ssh://git@github.com/MarinaStrocchi/Historia.git@master']
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[build]
+exclude = [
+    "/README.md",
+    "/GSA_library.egg-info",
+    "/example",
+    "/.git"
+]
+
