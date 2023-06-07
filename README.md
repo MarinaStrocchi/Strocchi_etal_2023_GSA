@@ -28,3 +28,11 @@ pip install .
 ````
 
 This should install all packages that the library needs.
+
+# Example
+
+The example shows how to run train Gaussina processes emulators for scalar outputs, run a global sensitivity analysis using the emulators and finally rank the parameters accourding to their sensitivity indices. The example needs a datasets made of two .csv files:
+- parameters.csv: input parameters files. The first row contains the parameter labels, while the following rows contain a sample per parameter.
+- outputs.csv: output features computed with the ToR-ORd ionic model (https://elifesciences.org/articles/48890). The first row contains the output labels, while the following rows contain a value per output. The rows correspond to the outputs computed with the parameter values in the parameters.csv file.
+
+These data 
