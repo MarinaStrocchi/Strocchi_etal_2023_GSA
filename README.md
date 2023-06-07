@@ -13,3 +13,5 @@ conda activate
 ````
 
 This will create and activate a virtual environment called py38 (or whatever you like) with python 3.8.13. The python3 version is important so do not change it.
+
+You can then close the reporistory 
