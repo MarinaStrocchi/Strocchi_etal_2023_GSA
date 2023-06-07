@@ -14,4 +14,17 @@ conda activate
 
 This will create and activate a virtual environment called py38 (or whatever you like) with python 3.8.13. The python3 version is important so do not change it.
 
-You can then close the reporistory 
+You can then clone the reporistory in a folder of your choosing:
+
+````
+git clone https://github.com/MarinaStrocchi/Strocchi_etal_2023_GSA.git
+````
+
+To install:
+
+````
+pip install --upgrade pip
+pip install .
+````
+
+This should install all packages that the library needs.
