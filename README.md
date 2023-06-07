@@ -32,7 +32,25 @@ This should install all packages that the library needs.
 # Example
 
 The example shows how to run train Gaussina processes emulators for scalar outputs, run a global sensitivity analysis using the emulators and finally rank the parameters accourding to their sensitivity indices. The example needs a datasets made of two .csv files:
+
 - parameters.csv: input parameters files. The first row contains the parameter labels, while the following rows contain a sample per parameter.
 - outputs.csv: output features computed with the ToR-ORd ionic model (https://elifesciences.org/articles/48890). The first row contains the output labels, while the following rows contain a value per output. The rows correspond to the outputs computed with the parameter values in the parameters.csv file.
 
-These data 
+These two files are provided with the example but they can also be downloaded from the Zenodo database linked to the publication (DOI: 10.5281/zenodo.7405335).
+
+Once you have successfully installed the library, first you need to transform the .csv files into the format the emulators need to be trained. To do this, run:
+ ````
+ python data_preprocess.py
+ ````
+ This will create a folder called 'data' in the example folder with the files the emulators need.
+ 
+ To train the emulators, run a sensitivity analysis using the emulators and rank the parameters, run:
+  ````
+ python example.py
+ ````
+ 
+ For each output feature (4 in this case), we train five separate emulators to perform a 5-fold cross validation, to check the performance of the emualtors. We also train an emulator using the whole dataset. This will be used in the sensitivity analysis. At lines 14 of example.py, you can choose if you want to train all 5 emulators for the cross validation in parallel. If set to False, the training might take a while. 
+ 
+ At line 15 of example.py, you can also choose to consider the uncertainties of the emulators in the sensitivity analysis by sampling N=1000 times the posterior distribution of the emulators, and to compute the sensitivity indices for each of these 1000 samples. If you set UNCERTAINTY=True, the sensitivity analysis will take time. Otherwise, if you set UNCERTAINTY=False, the sensitivity analysis will be very quick.
+ 
+ The code will also plot a heatmap with the resulting sensitivity indices and a barplot with the ranked parameters. 
