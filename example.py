@@ -12,7 +12,7 @@ from GSA_library.plotting import *
 from GSA_library.gsa_plotting import * 
 
 PARALLEL=False
-UNCERTAINTY=False
+UNCERTAINTY=True
 
 def main():
 
